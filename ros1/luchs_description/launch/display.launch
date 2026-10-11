@@ -1,0 +1,16 @@
+<!-- Display a Luchs chassis in RViz.
+     roslaunch luchs_description display.launch config:=4ws       (Luchs A: df | fa | da | 4ws)
+     roslaunch luchs_description display.launch config:=b         (Luchs B; variant:=cooling) -->
+<launch>
+  <arg name="config" default="4ws"/>
+  <arg name="variant" default="standard"/>
+  <arg name="prefix" default=""/>
+  <arg name="use_rviz" default="true"/>
+  <param if="$(eval config == 'b')" name="robot_description"
+         command="$(find xacro)/xacro $(find luchs_description)/urdf/luchs_b.urdf.xacro variant:=$(arg variant) prefix:=$(arg prefix)"/>
+  <param unless="$(eval config == 'b')" name="robot_description"
+         command="$(find xacro)/xacro $(find luchs_description)/urdf/luchs_a.urdf.xacro config:=$(arg config) prefix:=$(arg prefix)"/>
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+  <node if="$(arg use_rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find luchs_description)/rviz/display.rviz"/>
+</launch>

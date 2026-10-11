@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  Luchs A - top-level robot description.
+  Chassis: RJ Tech Limited. Software / description: TerraAgent Robotics.
+
+  xacro args:
+    config        : df | fa | da | 4ws   (default 4ws)
+                    df  = skid-steer 4WD
+                    fa  = front Ackermann 4WD
+                    da  = dual (front + rear) Ackermann 4WD
+                    4ws = four-wheel independent steering, swing-arm suspension
+    prefix        : string prepended to every link and joint name (default "")
+    laser_example : true | false, adds the example laser_link mount (default true)
+
+  Example:
+    xacro luchs_a.urdf.xacro config:=fa prefix:=robot1_
+-->
+<robot name="luchs_a" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="config" default="4ws"/>
+  <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="laser_example" default="true"/>
+
+  <xacro:include filename="$(find luchs_description)/urdf/luchs_a_macro.xacro"/>
+
+  <xacro:luchs_a prefix="$(arg prefix)" config="$(arg config)" laser_example="$(arg laser_example)"/>
+</robot>

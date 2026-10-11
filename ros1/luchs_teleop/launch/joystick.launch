@@ -1,0 +1,14 @@
+<!-- Joystick teleoperation: joy_node + teleop_twist_joy -> cmd_vel.
+     roslaunch luchs_teleop joystick.launch build:=b       (Luchs B scaling; Luchs A: df | fa | da | 4ws) -->
+<launch>
+  <arg name="build" default="4ws"/>
+  <arg name="joy_dev" default="/dev/input/js0"/>
+  <arg name="config" default="$(eval 'joystick_b' if build == 'b' else 'joystick')"/>
+  <node pkg="joy" type="joy_node" name="joy_node">
+    <param name="dev" value="$(arg joy_dev)"/>
+    <rosparam command="load" file="$(find luchs_teleop)/config/$(arg config).yaml"/>
+  </node>
+  <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_twist_joy">
+    <rosparam command="load" file="$(find luchs_teleop)/config/$(arg config).yaml"/>
+  </node>
+</launch>

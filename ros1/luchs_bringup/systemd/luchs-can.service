@@ -1,0 +1,16 @@
+# Bring up the CAN interface at boot.
+#   sudo cp luchs-can.service /etc/systemd/system/ && sudo systemctl enable --now luchs-can
+[Unit]
+Description=Luchs chassis CAN interface (1 Mbit/s)
+After=network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/ip link set can0 type can bitrate 1000000 restart-ms 100
+ExecStart=/sbin/ip link set can0 up
+ExecStop=/sbin/ip link set can0 down
+
+[Install]
+WantedBy=multi-user.target

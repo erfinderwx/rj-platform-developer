@@ -1,0 +1,34 @@
+<!-- Modified 2026-10-11 for 1.1.0-preview.1: default to simulation; B firmware/parameters unconfirmed. -->
+<!-- Bring up a Luchs B chassis: robot model, CAN driver and (optionally) joystick teleoperation.
+     roslaunch luchs_bringup luchs_b.launch can_interface:=can0          (simulator unless dry_run:=false; LCI firmware unconfirmed)
+     roslaunch luchs_bringup luchs_b.launch protocol:=legacy_b           (VCU reference simulator; actual interface requires confirmation)
+     roslaunch luchs_bringup luchs_b.launch dry_run:=true                (no hardware) -->
+<launch>
+  <arg name="protocol" default="lci" doc="lci | legacy_b"/>
+  <arg name="variant" default="standard" doc="standard | cooling (model colour only)"/>
+  <arg name="can_interface" default="can0"/>
+  <arg name="prefix" default=""/>
+  <arg name="params_file" default="$(find luchs_driver)/config/luchs_b.yaml"/>
+  <arg name="publish_tf" default="true"/>
+  <arg name="dry_run" default="true" doc="Preview default: simulator; hardware requires explicit false after confirmation"/>
+  <arg name="teleop" default="false"/>
+
+  <param name="robot_description"
+         command="$(find xacro)/xacro $(find luchs_description)/urdf/luchs_b.urdf.xacro variant:=$(arg variant) prefix:=$(arg prefix)"/>
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+  <node pkg="luchs_driver" type="luchs_driver_node" name="luchs_driver" output="screen">
+    <rosparam command="load" file="$(arg params_file)"/>
+    <param name="build" value="b"/>
+    <param name="protocol/type" value="$(arg protocol)"/>
+    <param name="control/rate" value="100.0" if="$(eval protocol == 'legacy_b')"/>
+    <param name="can_interface" value="$(arg can_interface)"/>
+    <param name="dry_run" value="$(arg dry_run)"/>
+    <param name="odom/publish_tf" value="$(arg publish_tf)"/>
+    <param name="odom/frame_id" value="$(arg prefix)odom"/>
+    <param name="odom/child_frame_id" value="$(arg prefix)base_footprint"/>
+    <param name="joint_prefix" value="$(arg prefix)"/>
+  </node>
+  <include if="$(arg teleop)" file="$(find luchs_teleop)/launch/joystick.launch">
+    <arg name="build" value="b"/>
+  </include>
+</launch>

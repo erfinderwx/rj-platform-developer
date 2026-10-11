@@ -1,6 +1,11 @@
-# 开发文档
+# Developer documentation
 
-这里将逐步提供入门流程、支持范围与经核实的开发文档。当前只有待补充结构；尚无可执行安装或接入步骤。
+Start with the [Luchs version development manual](luchs-development-manual.md) for preview scope, test status and the conditions for a formal release.
 
-- [入门资料状态](getting-started.md)
-- [兼容性](compatibility.md)
+- [Get started](getting-started.md)
+- [Compatibility](compatibility.md)
+- [Public source manifest](luchs-public-sources.json)
+- [ROS 2 package instructions](../ros2/README.md)
+- [ROS 1 package instructions](../ros1/README.md)
+
+The manual distinguishes software checks, simulated behavior and vehicle validation. A build or simulator pass does not establish hardware compatibility.

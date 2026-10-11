@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>luchs_sdk</name>
+  <version>1.1.0</version>
+  <description>
+    ROS-independent C++17 SDK for Luchs A and Luchs B robot chassis: CAN protocol codecs (Luchs A
+    v1.1, LCI v1.0, Luchs B VCU V2.6), SocketCAN transport, steering kinematics, a thread-safe
+    chassis client with command watchdog and heartbeat, simulators, and the luchs_cli tool.
+    The same sources are built by luchs_ros1 (ROS 1) as a plain CMake package.
+  </description>
+  <maintainer email="support@terraagent-robotics.com">TerraAgent Robotics</maintainer>
+  <license>Apache-2.0</license>
+  <url type="website">https://www.rjtech-offroad.com</url>
+  <author>TerraAgent Robotics</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

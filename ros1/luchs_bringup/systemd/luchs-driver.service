@@ -1,0 +1,17 @@
+# Start the Luchs driver at boot (after the CAN interface).
+# Edit User, the workspace path and the launch arguments (Luchs B: luchs_b launch file), then:
+#   sudo cp luchs-driver.service /etc/systemd/system/ && sudo systemctl enable --now luchs-driver
+[Unit]
+Description=Luchs chassis ROS 1 driver
+After=luchs-can.service
+Requires=luchs-can.service
+
+[Service]
+User=robot
+Environment=ROS_MASTER_URI=http://localhost:11311
+ExecStart=/bin/bash -lc 'source /opt/ros/noetic/setup.bash && source $HOME/luchs_ws/devel/setup.bash && exec roslaunch luchs_bringup luchs_a.launch build:=4ws'
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

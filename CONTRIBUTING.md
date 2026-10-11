@@ -1,7 +1,7 @@
-# 参与维护
+# Contribute to the public preview
 
-欢迎提出面向开发者的文档问题和功能建议。请使用对应 Issue 模板，描述可公开的背景、预期行为和影响；不要附带客户身份、私人联系方式、凭据、未获准公开的设计资料或原始日志包。
+Open an issue with the preview commit, operating system, ROS distribution, selected build/protocol, transport type and sanitized reproduction steps. Include physical hardware/firmware versions only when approved for public disclosure.
 
-提交 PR 时请说明修改目的、可公开的来源或授权依据，以及你实际检查的内容。公开 PR 在创建时即可被所有人查看，因此提交前请自行确认内容和附件允许公开。维护者会检查准确性、适用范围与许可；产品能力、接口参数、兼容性和实测结论只有获得验证及发布批准后才会加入。
+Build one ROS tree at a time and run its tests before proposing changes. Describe which checks ran and which remain pending. Preserve upstream attribution and distinguish simulator behavior from vehicle support. Protocol identifiers, units, geometry and steering polarity require evidence rather than guessed values.
 
-建议按一个问题创建一个小 PR。当前仓库只有导航和模板，没有 SDK、驱动或可运行示例；不要为填目录添加占位代码。
+Do not attach private archives, credentials, unapproved CAD/certificates or internal correspondence. Follow the [development manual](docs/luchs-development-manual.md) for formal release acceptance. Frozen release snapshot branches stay unchanged; publish further changes under a new preview version.

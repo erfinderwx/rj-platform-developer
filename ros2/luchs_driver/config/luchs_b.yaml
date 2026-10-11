@@ -1,0 +1,59 @@
+# Modified 2026-10-11 for repository 1.1.0-preview.1: B defaults to simulation.
+# All protocol, geometry and battery values remain unconfirmed upstream assumptions.
+# Luchs B: four hub motors, front + rear EPS (single or dual Ackermann), EPB.
+# Default motion model: dual Ackermann. Interface: LCI v1.0 (draft r3) on the customer CAN, 1 Mbit/s.
+# Usage: ros2 launch luchs_bringup luchs_b.launch.py
+#        ros2 launch luchs_bringup luchs_b.launch.py protocol:=legacy_b   # units before LCI firmware
+/**:
+  ros__parameters:
+    build: b
+    protocol.type: ""               # "" = lci; legacy_b = VCU upper interface V2.6 (0x701 / 0x703)
+    motion_model: ""                # dual_ackermann (default) or ackermann (front axle only)
+    geometry.wheelbase: 1.430       # data sheet; chassis team: 1.445, TO CONFIRM
+    geometry.track: 0.970           # data sheet; top-view drawing: 0.990, TO CONFIRM
+    geometry.wheel_radius: 0.2794   # 22x7-10 tyre, loaded radius TO CONFIRM
+    geometry.max_steer_angle: 0.5236      # rad (30 deg), TO CONFIRM
+    can_interface: can0
+    dry_run: true  # preview default: simulator; hardware requires explicit opt-in
+    # control
+    control.rate: 50.0              # Hz; LCI: commands + heartbeat every 20 ms (timeout 200 ms)
+    control.cmd_timeout: 0.5        # s
+    control.feedback_timeout: 0.3   # s
+    control.park_when_idle: true    # gear P = parking brake (EPB)
+    control.send_host_time: true    # 0x5A4 once a second
+    # limits (vehicle maximum 11.1 m/s = 40 km/h; keep low until the site is mapped)
+    limits.max_vx: 2.0
+    limits.max_vy: 0.0
+    limits.max_wz: 1.0
+    limits.max_accel_x: 1.0
+    limits.max_accel_y: 0.0
+    limits.max_accel_wz: 1.0
+    limits.allow_pivot_turn: false  # turning on the spot: not available on Luchs B
+    # LCI
+    lci.follow_live_limits: true    # apply 0x5B0 before sending, keeping path curvature
+    lci.accel_limit: 0.0            # m/s^2 in 0x5A1; 0 = chassis default ramp
+    lci.speed_limit: 0.0            # m/s host cap in the heartbeat; 0 = chassis default
+    lci.check_checksum: true
+    # VCU upper interface V2.6 (only with protocol.type: legacy_b). TO CONFIRM on the vehicle.
+    legacy_b.cmd_id: 1793           # 0x701
+    legacy_b.fb_id: 1795            # 0x703
+    legacy_b.steer_sign: -1         # wire angle positive = steer right
+    legacy_b.max_wheel_angle_deg: 42.0
+    legacy_b.steer_rate: 200.0      # deg/s
+    legacy_b.speed_cap_kmh: 30.0
+    legacy_b.throttle_ff: 10.0
+    legacy_b.throttle_kp: 20.0
+    legacy_b.throttle_ki: 8.0
+    legacy_b.max_throttle: 40.0
+    legacy_b.brake_kp: 40.0
+    legacy_b.hold_brake: 30.0
+    legacy_b.max_brake: 80.0
+    # odometry
+    odom.frame_id: odom
+    odom.child_frame_id: base_footprint
+    odom.publish_tf: true           # false when robot_localization publishes odom -> base
+    imu.frame_id: base_link         # chassis IMU (LCI 0x5BE / 0x5B1), vehicle frame
+    publish_rate: 50.0
+    cmd_vel_stamped: false
+    battery_low_percent: 20.0
+    battery.design_capacity: 60.0   # upstream standard-pack assumption; pack count/capacity mapping TO CONFIRM

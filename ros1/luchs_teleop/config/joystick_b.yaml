@@ -1,0 +1,15 @@
+# Xbox-style gamepad for Luchs B (Xbox One / Logitech F710 in X mode).
+# Hold LB to drive, hold LB + RB for the fast range. Release LB: the vehicle stops
+# (teleop_twist_joy publishes zero once, the driver watchdog and the chassis heartbeat do the rest).
+# Luchs B steers like a car (dual Ackermann): no sideways motion, no turning on the spot.
+deadzone: 0.05
+autorepeat_rate: 20.0
+require_enable_button: true
+enable_button: 4          # LB
+enable_turbo_button: 5    # RB
+axis_linear.x: 1          # left stick up/down
+axis_angular.yaw: 3       # right stick left/right
+scale_linear.x: 1.0
+scale_angular.yaw: 0.5
+scale_linear_turbo.x: 2.5
+scale_angular_turbo.yaw: 0.8

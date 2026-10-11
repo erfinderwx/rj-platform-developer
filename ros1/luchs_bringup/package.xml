@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>luchs_bringup</name>
+  <version>1.1.0</version>
+  <description>Launch files (Luchs A, Luchs B), CAN setup script, udev rule and systemd units for Luchs robot chassis (ROS 1).</description>
+  <maintainer email="support@terraagent-robotics.com">TerraAgent Robotics</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>luchs_driver</exec_depend>
+  <exec_depend>luchs_description</exec_depend>
+  <exec_depend>luchs_teleop</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+</package>

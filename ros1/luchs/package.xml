@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>luchs</name>
+  <version>1.1.0</version>
+  <description>Metapackage for Luchs robot chassis software, ROS 1 (TerraAgent Robotics, chassis by RJ Tech Limited).</description>
+  <maintainer email="support@terraagent-robotics.com">TerraAgent Robotics</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>luchs_sdk</exec_depend>
+  <exec_depend>luchs_msgs</exec_depend>
+  <exec_depend>luchs_driver</exec_depend>
+  <exec_depend>luchs_description</exec_depend>
+  <exec_depend>luchs_bringup</exec_depend>
+  <exec_depend>luchs_teleop</exec_depend>
+  <export><metapackage/></export>
+</package>

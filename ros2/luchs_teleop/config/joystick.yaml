@@ -1,0 +1,21 @@
+# Xbox-style gamepad (Xbox One / Logitech F710 in X mode).
+# Hold LB to drive, hold LB + RB for the fast range. Release LB: the robot stops
+# (teleop_twist_joy publishes zero once, the driver watchdog does the rest).
+/**:
+  ros__parameters:
+    # joy_node
+    deadzone: 0.05
+    autorepeat_rate: 20.0
+    # teleop_twist_joy
+    require_enable_button: true
+    enable_button: 4          # LB
+    enable_turbo_button: 5    # RB
+    axis_linear.x: 1          # left stick up/down
+    axis_linear.y: 0          # left stick left/right (sideways, 4ws model only)
+    axis_angular.yaw: 3       # right stick left/right
+    scale_linear.x: 0.5
+    scale_linear.y: 0.3
+    scale_angular.yaw: 0.8
+    scale_linear_turbo.x: 1.5
+    scale_linear_turbo.y: 0.6
+    scale_angular_turbo.yaw: 1.2

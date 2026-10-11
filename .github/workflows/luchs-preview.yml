@@ -1,0 +1,69 @@
+name: Luchs preview checks
+
+"on":
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: luchs-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sdk:
+    name: Standalone SDK (${{ matrix.tree }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        tree: [ros1, ros2]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install CMake, compiler and GTest
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential cmake libgtest-dev
+      - name: Build and execute standalone SDK tests
+        run: bash scripts/ci_sdk.sh "${{ matrix.tree }}"
+
+  ros2:
+    name: ROS 2 ${{ matrix.distro }} build and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [humble, jazzy]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Build and test in the matching official ROS image
+        run: |
+          docker run --rm --pull always \
+            --mount "type=bind,source=${PWD},target=/repo,readonly" \
+            --env ROS_DISTRO="${{ matrix.distro }}" \
+            "ros:${{ matrix.distro }}-ros-base" \
+            bash /repo/scripts/ci_ros2.sh
+
+  ros1:
+    name: ROS 1 Noetic build and A/B simulator rostests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Build and run both provided rostests in official Noetic image
+        run: |
+          docker run --rm --pull always \
+            --mount "type=bind,source=${PWD},target=/repo,readonly" \
+            ros:noetic-ros-base \
+            bash /repo/scripts/ci_ros1.sh

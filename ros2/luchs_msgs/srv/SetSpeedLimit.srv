@@ -1,0 +1,6 @@
+# Host-side speed cap carried by the heartbeat (LCI 0x5A5 SpeedLimit). The chassis applies the
+# lower of this and its own limits and reports the result in ChassisState.active_speed_limit.
+float64 speed_limit           # m/s, 0 = chassis default
+---
+bool success
+string message

@@ -1,0 +1,288 @@
+<?xml version="1.0"?>
+<!--
+  Luchs A chassis - reusable xacro macro.
+  Chassis: RJ Tech Limited. Software / description: TerraAgent Robotics.
+
+  Frame conventions (REP-103 / REP-105):
+    base_footprint : on the ground plane, centred between the front and rear axles
+                     (half wheelbase) and between the left and right wheels.
+    base_link      : directly above base_footprint at wheel-axle height
+                     (z = wheel radius = 0.103 m). x forward, y left, z up.
+    <corner>_steer_link : on the vertical steering axis, at axle height. For the
+                     4WS build the steering axis passes through the wheel centre
+                     (measured from CAD, offset < 1 mm). Joint is fixed for
+                     configurations that cannot steer that corner.
+    <corner>_wheel_link : wheel centre, spins about its y axis.
+    top_plate_link : on the top surface of the deck, x/y as base_link.
+    rail_left_link / rail_right_link : on top of the two 2040 rails (y = +/-0.100),
+                     at mid length. Use these to mount payloads.
+    imu_link       : PLACEHOLDER at base_link origin (to be confirmed).
+    laser_link     : EXAMPLE mount on the front of the top plate (optional).
+
+  Values marked to be confirmed are estimates and must be checked on the real vehicle.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===================== shared constants ===================== -->
+  <xacro:property name="PI" value="3.141592653589793"/>
+  <xacro:property name="wheel_radius" value="0.103"/>        <!-- 206 mm wheel, all builds -->
+  <xacro:property name="wheel_mass" value="1.2"/>            <!-- estimate, to be confirmed -->
+  <xacro:property name="steer_mass" value="0.6"/>            <!-- estimate, to be confirmed -->
+  <xacro:property name="rail_spacing" value="0.200"/>        <!-- 2040 rails, centre to centre -->
+  <xacro:property name="rail_width" value="0.040"/>
+  <xacro:property name="rail_height" value="0.020"/>
+  <xacro:property name="rail_length" value="0.700"/>         <!-- from 4WS CAD (end caps excluded) -->
+  <xacro:property name="mesh_dir" value="package://luchs_description/meshes"/>
+
+  <!-- Per-configuration data. Distances in metres, masses in kg.
+       z values are relative to base_link (= axle height).
+       Only the 4WS build has CAD; df/fa/da use primitive boxes (CAD still to come). -->
+  <xacro:property name="cfg_table" value="${dict([
+      ('df', dict(mass=40.0, half_wb=0.297, half_track=0.298, steer_front=False, steer_rear=False, steer_lim=0.0,
+              body_len=0.700, body_wid=0.480, body_zmin=-0.026, deck_z=0.169,
+              wheel_width=0.069)),
+      ('fa', dict(mass=45.0, half_wb=0.297, half_track=0.298, steer_front=True, steer_rear=False, steer_lim=0.6,
+              body_len=0.700, body_wid=0.480, body_zmin=-0.026, deck_z=0.169,
+              wheel_width=0.069)),
+      ('da', dict(mass=50.0, half_wb=0.297, half_track=0.298, steer_front=True, steer_rear=True, steer_lim=0.6,
+              body_len=0.700, body_wid=0.480, body_zmin=-0.026, deck_z=0.169,
+              wheel_width=0.069)),
+      ('4ws', dict(mass=55.0, half_wb=0.297, half_track=0.250, steer_front=True, steer_rear=True, steer_lim=PI/2,
+              body_len=0.800, body_wid=0.428, body_zmin=0.034, deck_z=0.251,
+              wheel_width=0.052))])}"/>
+
+  <material name="luchs_dark_grey"><color rgba="0.22 0.23 0.25 1.0"/></material>
+  <material name="luchs_black"><color rgba="0.04 0.04 0.04 1.0"/></material>
+  <material name="luchs_red"><color rgba="0.753 0.043 0.067 1.0"/></material>  <!-- #C00B11 accent -->
+  <material name="luchs_rail"><color rgba="0.35 0.36 0.38 1.0"/></material>
+
+  <!-- ===================== inertia helpers ===================== -->
+  <xacro:macro name="box_inertial" params="m x y z *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12.0}" ixy="0" ixz="0"
+               iyy="${m*(x*x+z*z)/12.0}" iyz="0"
+               izz="${m*(x*x+y*y)/12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- cylinder with its axis along the link y axis (wheel) -->
+  <xacro:macro name="wheel_inertial" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+h*h)/12.0}" ixy="0" ixz="0"
+               iyy="${m*r*r/2.0}" iyz="0"
+               izz="${m*(3*r*r+h*h)/12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ===================== one corner: steer link + wheel ===================== -->
+  <!-- fb: +1 front / -1 rear ; lr: +1 left / -1 right -->
+  <xacro:macro name="luchs_corner" params="prefix config name fb lr steerable">
+    <xacro:property name="c" value="${cfg_table[config]}"/>
+
+    <link name="${prefix}${name}_steer_link">
+      <xacro:if value="${config == '4ws'}">
+        <!-- Two mesh variants: FL/RR share one (rotated by pi), FR/RL share the mirror one.
+             No negative scaling is used. -->
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 ${0.0 if fb > 0 else PI}"/>
+          <geometry>
+            <mesh filename="${mesh_dir}/luchs_a_4ws_steer_module${'' if fb*lr > 0 else '_mirror'}.stl"/>
+          </geometry>
+          <material name="luchs_red"/>
+        </visual>
+        <collision>
+          <!-- vertical swing-arm leg + spring, inboard of the wheel -->
+          <origin xyz="0 ${-lr*0.063} 0.059" rpy="0 0 0"/>
+          <geometry><box size="0.160 0.040 0.140"/></geometry>
+        </collision>
+      </xacro:if>
+      <xacro:box_inertial m="${steer_mass}" x="0.16" y="0.06" z="0.14">
+        <origin xyz="0 ${-lr*0.04} 0.05" rpy="0 0 0"/>
+      </xacro:box_inertial>
+    </link>
+
+    <xacro:if value="${steerable}">
+      <joint name="${prefix}${name}_steer_joint" type="revolute">
+        <parent link="${prefix}base_link"/>
+        <child link="${prefix}${name}_steer_link"/>
+        <origin xyz="${fb*c['half_wb']} ${lr*c['half_track']} 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <!-- limits: 4ws +/-pi/2 to be confirmed; fa/da +/-0.6 rad (consistent with the
+             published 0.89 m / 0.445 m minimum turning radius). effort/velocity to be confirmed -->
+        <limit lower="${-c['steer_lim']}" upper="${c['steer_lim']}" effort="20.0" velocity="3.0"/>
+      </joint>
+    </xacro:if>
+    <xacro:unless value="${steerable}">
+      <joint name="${prefix}${name}_steer_joint" type="fixed">
+        <parent link="${prefix}base_link"/>
+        <child link="${prefix}${name}_steer_link"/>
+        <origin xyz="${fb*c['half_wb']} ${lr*c['half_track']} 0" rpy="0 0 0"/>
+      </joint>
+    </xacro:unless>
+
+    <link name="${prefix}${name}_wheel_link">
+      <visual>
+        <xacro:if value="${config == '4ws'}">
+          <!-- mesh outer face is +y; right wheels are turned by pi about z -->
+          <origin xyz="0 0 0" rpy="0 0 ${0.0 if lr > 0 else PI}"/>
+          <geometry><mesh filename="${mesh_dir}/luchs_a_wheel.stl"/></geometry>
+        </xacro:if>
+        <xacro:unless value="${config == '4ws'}">
+          <!-- primitive wheel: CAD for this build still to come; width to be confirmed -->
+          <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+          <geometry><cylinder radius="${wheel_radius}" length="${c['wheel_width']}"/></geometry>
+        </xacro:unless>
+        <material name="luchs_black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${c['wheel_width']}"/></geometry>
+      </collision>
+      <xacro:wheel_inertial m="${wheel_mass}" r="${wheel_radius}" h="${c['wheel_width']}"/>
+    </link>
+
+    <joint name="${prefix}${name}_wheel_joint" type="continuous">
+      <parent link="${prefix}${name}_steer_link"/>
+      <child link="${prefix}${name}_wheel_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="30.0" velocity="20.0"/>  <!-- to be confirmed -->
+    </joint>
+  </xacro:macro>
+
+  <!-- ===================== a 2040 rail (primitive, box builds only) ===================== -->
+  <xacro:macro name="luchs_rail_visual" params="y z">
+    <visual>
+      <origin xyz="0 ${y} ${z + rail_height/2}" rpy="0 0 0"/>
+      <geometry><box size="${rail_length} ${rail_width} ${rail_height}"/></geometry>
+      <material name="luchs_rail"/>
+    </visual>
+  </xacro:macro>
+
+  <!-- ===================== the whole chassis ===================== -->
+  <xacro:macro name="luchs_a" params="prefix:='' config:='4ws' laser_example:=true">
+    <xacro:if value="${config not in ['df', 'fa', 'da', '4ws']}">
+      ${xacro.fatal('luchs_a: config must be one of df, fa, da, 4ws (got: ' + str(config) + ')')}
+    </xacro:if>
+    <xacro:property name="c" value="${cfg_table[config]}"/>
+    <xacro:property name="body_mass" value="${c['mass'] - 4*wheel_mass - 4*steer_mass}"/>
+    <xacro:property name="body_h" value="${c['deck_z'] - c['body_zmin']}"/>
+    <xacro:property name="rail_top_z" value="${c['deck_z'] + rail_height}"/>
+
+    <link name="${prefix}base_footprint"/>
+
+    <joint name="${prefix}base_footprint_joint" type="fixed">
+      <parent link="${prefix}base_footprint"/>
+      <child link="${prefix}base_link"/>
+      <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}base_link">
+      <xacro:if value="${config == '4ws'}">
+        <visual>
+          <!-- mesh already in base_link coordinates (REP-103, metres, origin at axle height) -->
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry><mesh filename="${mesh_dir}/luchs_a_4ws_body.stl"/></geometry>
+          <material name="luchs_dark_grey"/>
+        </visual>
+        <!-- collision: main shell, four steering-motor housings, two rails -->
+        <collision>
+          <origin xyz="0 0 ${(c['deck_z'] + c['body_zmin'])/2}" rpy="0 0 0"/>
+          <geometry><box size="${c['body_len']} ${c['body_wid']} ${body_h}"/></geometry>
+        </collision>
+        <xacro:macro name="_housing" params="sx sy">
+          <collision>
+            <origin xyz="${sx*0.297} ${sy*0.245} 0.191" rpy="0 0 0"/>
+            <geometry><box size="0.083 0.090 0.111"/></geometry>
+          </collision>
+        </xacro:macro>
+        <xacro:_housing sx="1" sy="1"/>
+        <xacro:_housing sx="1" sy="-1"/>
+        <xacro:_housing sx="-1" sy="1"/>
+        <xacro:_housing sx="-1" sy="-1"/>
+      </xacro:if>
+      <xacro:unless value="${config == '4ws'}">
+        <!-- CAD for the ${config} build is still to come: box visual with the
+             published envelope (800 x 665 x 292 mm overall incl. wheels and rails,
+             77 mm ground clearance). Body box length/width are to be confirmed. -->
+        <visual>
+          <origin xyz="0 0 ${(c['deck_z'] + c['body_zmin'])/2}" rpy="0 0 0"/>
+          <geometry><box size="${c['body_len']} ${c['body_wid']} ${body_h}"/></geometry>
+          <material name="luchs_dark_grey"/>
+        </visual>
+        <xacro:luchs_rail_visual y="${rail_spacing/2}" z="${c['deck_z']}"/>
+        <xacro:luchs_rail_visual y="${-rail_spacing/2}" z="${c['deck_z']}"/>
+        <collision>
+          <origin xyz="0 0 ${(c['deck_z'] + c['body_zmin'])/2}" rpy="0 0 0"/>
+          <geometry><box size="${c['body_len']} ${c['body_wid']} ${body_h}"/></geometry>
+        </collision>
+      </xacro:unless>
+      <collision>
+        <origin xyz="0 ${rail_spacing/2} ${c['deck_z'] + rail_height/2}" rpy="0 0 0"/>
+        <geometry><box size="${rail_length} ${rail_width} ${rail_height}"/></geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 ${-rail_spacing/2} ${c['deck_z'] + rail_height/2}" rpy="0 0 0"/>
+        <geometry><box size="${rail_length} ${rail_width} ${rail_height}"/></geometry>
+      </collision>
+      <!-- body = total vehicle mass minus 4 wheels and 4 steer/hub modules;
+           uniform-box inertia, COM at the box centre: estimate, to be confirmed -->
+      <xacro:box_inertial m="${body_mass}" x="${c['body_len']}" y="${c['body_wid']}" z="${body_h}">
+        <origin xyz="0 0 ${(c['deck_z'] + c['body_zmin'])/2}" rpy="0 0 0"/>
+      </xacro:box_inertial>
+    </link>
+
+    <xacro:luchs_corner prefix="${prefix}" config="${config}" name="front_left"  fb="1"  lr="1"  steerable="${c['steer_front']}"/>
+    <xacro:luchs_corner prefix="${prefix}" config="${config}" name="front_right" fb="1"  lr="-1" steerable="${c['steer_front']}"/>
+    <xacro:luchs_corner prefix="${prefix}" config="${config}" name="rear_left"   fb="-1" lr="1"  steerable="${c['steer_rear']}"/>
+    <xacro:luchs_corner prefix="${prefix}" config="${config}" name="rear_right"  fb="-1" lr="-1" steerable="${c['steer_rear']}"/>
+
+    <!-- ===================== fixed utility frames ===================== -->
+    <!-- IMU: PLACEHOLDER at base_link origin. to be confirmed mounting position and orientation. -->
+    <link name="${prefix}imu_link"/>
+    <joint name="${prefix}imu_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}imu_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- top surface of the deck (4ws: from CAD; df/fa/da: from the 292 mm envelope, to be confirmed) -->
+    <link name="${prefix}top_plate_link"/>
+    <joint name="${prefix}top_plate_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}top_plate_link"/>
+      <origin xyz="0 0 ${c['deck_z']}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- top face of each 2040 rail, mid length -->
+    <link name="${prefix}rail_left_link"/>
+    <joint name="${prefix}rail_left_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}rail_left_link"/>
+      <origin xyz="0 ${rail_spacing/2} ${rail_top_z}" rpy="0 0 0"/>
+    </joint>
+    <link name="${prefix}rail_right_link"/>
+    <joint name="${prefix}rail_right_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}rail_right_link"/>
+      <origin xyz="0 ${-rail_spacing/2} ${rail_top_z}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- EXAMPLE only: a 2D/3D laser mount point on the front of the top plate,
+         between the rails. Move it to your real sensor position or disable it
+         with laser_example:=false. -->
+    <xacro:if value="${laser_example}">
+      <link name="${prefix}laser_link"/>
+      <joint name="${prefix}laser_joint" type="fixed">
+        <parent link="${prefix}top_plate_link"/>
+        <child link="${prefix}laser_link"/>
+        <origin xyz="0.320 0 0" rpy="0 0 0"/>
+      </joint>
+    </xacro:if>
+  </xacro:macro>
+
+</robot>

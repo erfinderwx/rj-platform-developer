@@ -1,0 +1,33 @@
+{
+  "release": "1.1.0-preview.1",
+  "upstreamPackageVersion": "1.1.0",
+  "date": "2026-10-11",
+  "releaseRef": "luchs-v1.1.0-preview.1",
+  "refType": "frozen snapshot branch",
+  "scope": "Previously approved public family ROS software only",
+  "license": "Apache-2.0",
+  "upstreamAttribution": "TerraAgent Robotics",
+  "sources": [
+    {
+      "directory": "ros1",
+      "file": "luchs_ros1_v1.1.0.zip",
+      "url": "https://xw-tech.de/rj/support/files/luchs/shared/luchs_ros1_v1.1.0.zip",
+      "sha256": "3af8ddc1b12e221f6a6ff1971133ede3fa9d96a2dee3ab4c5a231b7696e3f80c"
+    },
+    {
+      "directory": "ros2",
+      "file": "luchs_ros2_v1.1.0.zip",
+      "url": "https://xw-tech.de/rj/support/files/luchs/shared/luchs_ros2_v1.1.0.zip",
+      "sha256": "6b943f876c31bea7a985ce63aaaf41e2491b93f79d988f3651f490a169f523f1"
+    }
+  ],
+  "curation": [
+    "Separate ROS 1 and ROS 2 trees",
+    "Retain original package metadata and attribution",
+    "Update Git acquisition and driver documentation",
+    "Mark B draft and simulation scope",
+    "Default B YAML and launch dry_run to true",
+    "Move active automated checks to repository root; omit inactive nested source workflow"
+  ],
+  "excluded": "Private/internal archive and unrelated materials are not imported"
+}
