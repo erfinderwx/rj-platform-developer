@@ -1,0 +1,13 @@
+Luchs family software public development preview
+
+ros1/ and ros2/ derive from public Luchs family packages version 1.1.0.
+Original Copyright 2026 TerraAgent Robotics and Apache-2.0 notices are retained.
+
+RJ Tech preview 1.1.0-preview.1 (2026-10-11) reorganizes the two trees,
+updates acquisition and developer documentation, adds a development manual
+and automated software checks, supplies an independent ROS 1 driver guide,
+identifies B draft limitations, and defaults B YAML/launch to simulation.
+
+Upstream package metadata remains 1.1.0. No physical vehicle validation or
+manufacturer approval of draft interfaces is claimed.
+The public source manifest identifies the original downloadable packages.

@@ -1,0 +1,29 @@
+<!-- Bring up a Luchs A chassis: robot model, CAN driver and (optionally) joystick teleoperation.
+     roslaunch luchs_bringup luchs_a.launch build:=4ws can_interface:=can0
+     roslaunch luchs_bringup luchs_a.launch build:=4ws dry_run:=true        (no hardware) -->
+<launch>
+  <arg name="build" default="4ws" doc="df | fa | da | 4ws"/>
+  <arg name="can_interface" default="can0"/>
+  <arg name="prefix" default=""/>
+  <arg name="params_file" default="$(find luchs_driver)/config/luchs_a_$(arg build).yaml"/>
+  <arg name="publish_tf" default="true"/>
+  <arg name="dry_run" default="false"/>
+  <arg name="teleop" default="false"/>
+
+  <param name="robot_description"
+         command="$(find xacro)/xacro $(find luchs_description)/urdf/luchs_a.urdf.xacro config:=$(arg build) prefix:=$(arg prefix)"/>
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+  <node pkg="luchs_driver" type="luchs_driver_node" name="luchs_driver" output="screen">
+    <rosparam command="load" file="$(arg params_file)"/>
+    <param name="build" value="$(arg build)"/>
+    <param name="can_interface" value="$(arg can_interface)"/>
+    <param name="dry_run" value="$(arg dry_run)"/>
+    <param name="odom/publish_tf" value="$(arg publish_tf)"/>
+    <param name="odom/frame_id" value="$(arg prefix)odom"/>
+    <param name="odom/child_frame_id" value="$(arg prefix)base_footprint"/>
+    <param name="joint_prefix" value="$(arg prefix)"/>
+  </node>
+  <include if="$(arg teleop)" file="$(find luchs_teleop)/launch/joystick.launch">
+    <arg name="build" value="$(arg build)"/>
+  </include>
+</launch>

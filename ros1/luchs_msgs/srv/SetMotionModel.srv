@@ -1,0 +1,9 @@
+# Selects the motion model used for cmd_vel (must be supported by the build).
+uint8 MODEL_DIFFERENTIAL=1
+uint8 MODEL_FRONT_ACKERMANN=2
+uint8 MODEL_FOUR_WHEEL_STEER=3
+uint8 MODEL_DUAL_ACKERMANN=4
+uint8 motion_model
+---
+bool success
+string message

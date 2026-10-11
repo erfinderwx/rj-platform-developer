@@ -1,0 +1,9 @@
+<!-- Luchs A-4WS against the built-in simulator. -->
+<launch>
+  <include file="$(find luchs_bringup)/launch/luchs_a.launch"><arg name="build" value="4ws"/><arg name="dry_run" value="true"/></include>
+  <test test-name="odom_hz_a" pkg="rostest" type="hztest" name="odom_hz_a">
+    <param name="topic" value="/odom"/><param name="hz" value="50.0"/><param name="hzerror" value="10.0"/>
+    <param name="test_duration" value="4.0"/>
+  </test>
+  <test test-name="drive_a" pkg="luchs_driver" type="drive_check.py" name="drive_a" args="a"/>
+</launch>

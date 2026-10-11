@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+project(luchs_bringup)
+find_package(ament_cmake REQUIRED)
+install(DIRECTORY launch config systemd udev DESTINATION share/${PROJECT_NAME})
+install(PROGRAMS scripts/setup_can.sh DESTINATION lib/${PROJECT_NAME})
+ament_package()

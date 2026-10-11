@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(luchs_bringup)
+find_package(catkin REQUIRED)
+catkin_package()
+install(DIRECTORY launch systemd udev DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(PROGRAMS scripts/setup_can.sh DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

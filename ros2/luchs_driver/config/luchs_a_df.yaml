@@ -1,0 +1,42 @@
+# Luchs A-DF: skid-steer (differential)
+# Usage: ros2 launch luchs_bringup luchs_a.launch.py build:=df
+/**:
+  ros__parameters:
+    build: df
+    motion_model: ""                # empty = default for the build
+    geometry.wheelbase: 0.594
+    geometry.track: 0.596
+    geometry.wheel_radius: 0.103
+    geometry.max_steer_angle: 0.0      # rad, TO CONFIRM with the chassis team
+    can_interface: can0
+    dry_run: false
+    # control
+    control.rate: 20.0              # Hz, 1..50
+    control.cmd_timeout: 0.5        # s
+    control.feedback_timeout: 0.5   # s
+    control.park_when_idle: true
+    control.send_host_time: true
+    # limits (vehicle maximum 3.2 m/s; keep lower until the site is mapped)
+    limits.max_vx: 2.0
+    limits.max_wz: 1.5
+    limits.max_accel_x: 1.5
+    limits.max_accel_wz: 3.0
+    limits.allow_pivot_turn: true
+    # odometry
+    odom.frame_id: odom
+    odom.child_frame_id: base_footprint
+    odom.publish_tf: true           # false when robot_localization publishes odom -> base
+    publish_rate: 50.0
+    cmd_vel_stamped: false
+    battery_low_percent: 15.0
+    # protocol details still to be confirmed on the firmware (see docs/protocol_luchs_a.md)
+    protocol.wheel_steer_cmd_id: 1443         # 0x5A3; lamps on 0x5A2
+    protocol.wheel_steer_cmd_order: lf_rf_lr_rr
+    protocol.wheel_steer_fb_order: lf_lr_rf_rr
+    protocol.wheel_speed_fb_order: lf_lr_rf_rr
+    protocol.wheel_speed_scale: 0.001
+    protocol.ultrasonic_scale: 0.01
+    protocol.battery_soc_scale: 0.1
+    protocol.battery_temperature_scale: 0.1
+    protocol.battery_voltage_scale: 0.1
+    protocol.charging_scale: 1.0

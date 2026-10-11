@@ -1,0 +1,6 @@
+# Switches a payload power output of the chassis (LCI heartbeat, where fitted).
+uint8 output                  # 1 or 2
+bool on
+---
+bool success
+string message

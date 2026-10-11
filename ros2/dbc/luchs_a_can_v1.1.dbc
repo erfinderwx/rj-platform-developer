@@ -1,0 +1,147 @@
+VERSION "1.1"
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: Host Chassis
+
+
+BO_ 1440 MotionCmd: 8 Host
+ SG_ ControlMode : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Model : 55|8@0+ (1.0,0) [0|0] "" Vector__XXX
+ SG_ Wz : 39|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+ SG_ Vy : 23|16@0- (0.001,0) [0|0] "m/s" Vector__XXX
+ SG_ Vx : 7|16@0- (0.001,0) [0|0] "m/s" Vector__XXX
+
+BO_ 1441 SteerCmd: 8 Host
+ SG_ RearAngle : 31|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FrontAngle : 15|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ Gear : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+BO_ 1442 WheelSteerCmd_0x5A2: 8 Host
+ SG_ RR : 55|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FR : 39|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ RL : 23|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FL : 7|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+
+BO_ 1443 WheelSteerCmd_0x5A3: 8 Host
+ SG_ RR : 55|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ RL : 39|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FR : 23|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FL : 7|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+
+BO_ 1444 HostTime: 8 Host
+ SG_ UnixTimeMs : 7|64@0+ (1,0) [0|0] "ms" Vector__XXX
+
+BO_ 1461 MotionFb: 8 Chassis
+ SG_ ControlMode : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Model : 55|8@0+ (1.0,0) [0|0] "" Vector__XXX
+ SG_ Wz : 39|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+ SG_ Vy : 23|16@0- (0.001,0) [0|0] "m/s" Vector__XXX
+ SG_ Vx : 7|16@0- (0.001,0) [0|0] "m/s" Vector__XXX
+
+BO_ 1462 SteerFb: 8 Chassis
+ SG_ RearAngle : 31|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FrontAngle : 15|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ Gear : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+BO_ 1463 WheelSteerFb: 8 Chassis
+ SG_ RR : 55|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FR : 39|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ RL : 23|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+ SG_ FL : 7|16@0- (0.001,0) [0|0] "rad" Vector__XXX
+
+BO_ 1464 ProtectionFb: 8 Chassis
+ SG_ DistRight : 63|8@0+ (0.01,0) [0|0] "m" Vector__XXX
+ SG_ DistLeft : 55|8@0+ (0.01,0) [0|0] "m" Vector__XXX
+ SG_ DistRear : 47|8@0+ (0.01,0) [0|0] "m" Vector__XXX
+ SG_ DistFront : 39|8@0+ (0.01,0) [0|0] "m" Vector__XXX
+ SG_ FaultCode : 31|8@0+ (1.0,0) [0|0] "" Vector__XXX
+ SG_ EStop : 23|8@0+ (1.0,0) [0|0] "" Vector__XXX
+ SG_ Bumper : 15|8@0+ (1.0,0) [0|0] "" Vector__XXX
+ SG_ UltrasonicTrigger : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+BO_ 1465 WheelSpeedFb: 8 Chassis
+ SG_ RR : 55|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+ SG_ FR : 39|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+ SG_ RL : 23|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+ SG_ FL : 7|16@0- (0.001,0) [0|0] "rad/s" Vector__XXX
+
+BO_ 1466 MotorFaultFb: 8 Chassis
+ SG_ FaultLow : 39|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ FaultHigh : 7|32@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1467 BatteryFb: 8 Chassis
+ SG_ Voltage : 55|16@0+ (0.1,0) [0|0] "V" Vector__XXX
+ SG_ Charging : 39|16@0+ (1,0) [0|0] "%" Vector__XXX
+ SG_ Temperature : 23|16@0- (0.1,0) [0|0] "degC" Vector__XXX
+ SG_ SoC : 7|16@0+ (0.1,0) [0|0] "%" Vector__XXX
+
+BO_ 1468 LampFb: 8 Chassis
+ SG_ LightRain : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ FaultLamp : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ReverseLamp : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ TurnSignal : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+
+
+
+CM_ BO_ 1440 "Host -> chassis motion command";
+CM_ SG_ 1440 ControlMode "0x00 = host (autonomous) control";
+CM_ SG_ 1440 Vy "4WS model only";
+CM_ BO_ 1441 "Gear and Ackermann (axle) angles";
+CM_ BO_ 1442 "Protocol-document layout (4WS). Alternative: LampCmd_0x5A2";
+CM_ BO_ 1443 "Reference-driver layout (4WS). Alternative: LampCmd_0x5A3";
+CM_ BO_ 1444 "Host time, 64-bit big-endian; epoch to be confirmed";
+CM_ SG_ 1461 ControlMode "11 / 0x11 remote control, 22 / 0x22 host";
+CM_ SG_ 1464 DistFront "scaling to be confirmed";
+CM_ BO_ 1465 "Order and unit to be confirmed (reference-driver order shown)";
+CM_ BO_ 1466 "Bit definitions not yet published";
+CM_ SG_ 1467 Temperature "scaling to be confirmed";
+CM_ SG_ 1467 SoC "scaling to be confirmed";
+CM_ SG_ 1468 LightRain "0x00 dark/dry 0x01 dark/rain 0x10 light/dry 0x11 light/rain";
+
+
+
+VAL_ 1440 Model 1 "differential" 2 "front_ackermann" 3 "four_wheel_steer" 4 "dual_ackermann" ;
+VAL_ 1441 Gear 0 "disabled" 1 "park" 2 "reverse" 3 "neutral" 4 "drive" ;
+VAL_ 1461 Model 1 "differential" 2 "front_ackermann" 3 "four_wheel_steer" 4 "dual_ackermann" ;
+VAL_ 1462 Gear 0 "disabled" 1 "park" 2 "reverse" 3 "neutral" 4 "drive" ;
+VAL_ 1464 FaultCode 0 "no_fault" 1 "ultrasonic_stop" 2 "emergency_stop" 3 "parked" 4 "charging" 5 "fl_drive_motor" 6 "fr_drive_motor" 7 "rl_drive_motor" 8 "rr_drive_motor" 9 "fl_steer_motor" 10 "fr_steer_motor" 11 "rl_steer_motor" 12 "rr_steer_motor" 13 "rc_link_lost" 14 "watchdog" ;
+VAL_ 1464 EStop 0 "none" 1 "left" 2 "right" ;
+VAL_ 1464 Bumper 0 "none" 1 "front" 2 "rear" ;
+VAL_ 1464 UltrasonicTrigger 0 "none" 1 "left" 2 "right" 3 "front" 4 "rear" ;
+VAL_ 1468 TurnSignal 0 "off" 1 "left" 2 "right" ;
+
+
+

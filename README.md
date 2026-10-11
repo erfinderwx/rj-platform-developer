@@ -1,18 +1,30 @@
-# RJ Platform｜RJ 开发平台
+# RJ Platform Developer
 
-这是 RJ 开发平台面向外部开发者的公开入口。平台方向涵盖电驱动底盘、传感器集成和后续系统开发；第一阶段聚焦底盘与传感器二次开发。
+Public development resources for RJ Tech mobile platforms. The first software preview is **Luchs 1.1.0-preview.1**, curated from the public Luchs family ROS packages with upstream package version **1.1.0**.
 
-**当前阶段：仓库骨架。** 这里还没有可用的 SDK、驱动、协议、运行配置或示例程序。文档中的待补充项不表示产品已支持或已经实测。真实技术内容将在核实版本、授权和公开范围后逐步加入。
+This preview supports source review, building and simulator development. Hardware compatibility and formal vehicle acceptance are pending. In particular, Luchs B LCI describes a draft interface; simulator features do not establish that vehicle firmware implements them.
 
-## 导航
+| Resource | Start here |
+| --- | --- |
+| ROS 2 Humble and Jazzy | [ROS 2 instructions](ros2/README.md) |
+| ROS 1 Noetic | [ROS 1 instructions](ros1/README.md) |
+| Release status, tests and formal release requirements | [Luchs version development manual](docs/luchs-development-manual.md) |
+| Public source provenance | [Source manifest](docs/luchs-public-sources.json) |
 
-- [入门资料状态](docs/getting-started.md)：开发前需要确认的信息。
-- [兼容性](docs/compatibility.md)：未来按实际发布版本记录支持范围。
-- [接口资料](interfaces/README.md)、[配置资料](configs/README.md)、[示例](examples/README.md)：目前均待补充。
-- [参与维护](CONTRIBUTING.md)、[变更记录](CHANGELOG.md)。
+## Get the preview
 
-如有通用开发问题或建议，可使用 Issue；提交变更请先阅读贡献说明。不要在公开 Issue、PR 或附件中提交客户资料、凭据、未获授权的第三方内容或原始日志包。
+```bash
+git clone --branch luchs-v1.1.0-preview.1 --depth 1 https://github.com/erfinderwx/rj-platform-developer.git ~/luchs_preview
+```
 
-## 许可
+`luchs-v1.1.0-preview.1` is a frozen release snapshot branch. Future changes will use a new preview identifier. Record the immutable checkout commit with `git rev-parse HEAD`.
 
-开源许可证尚未确定。仓库公开可见不等于授予代码或文档的再使用许可；第三方内容须在授权明确后发布。
+Build **one** of `ros1/` or `ros2/` in a separate ROS workspace. They contain packages with the same names and different build systems. Follow that directory's README for dependencies and commands. The B preview launch and configuration default to `dry_run=true`; begin with simulator examples.
+
+## Contents and license
+
+The preview includes the C++17 SDK, ROS driver, messages and services, bringup, robot descriptions, teleoperation, examples and protocol references. The source packages and original attribution are preserved under [Apache 2.0](LICENSE); see [NOTICE](NOTICE) for the import and modifications. Protocol drafts and example geometry remain provisional.
+
+Only material already approved for the public software package is included. The broader internal material archive is outside this repository.
+
+See [contribution guidance](CONTRIBUTING.md), [documentation](docs/README.md) and [changes](CHANGELOG.md). Other platform sections remain placeholders until public implementations are available.

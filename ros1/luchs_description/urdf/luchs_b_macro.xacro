@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<!--
+  Modified 2026-10-11 for repository 1.1.0-preview.1: status clarification only.
+  Geometry, mass, inertia and IMU placement below are provisional upstream estimates, not verified mounting data.
+  Luchs B chassis - reusable xacro macro.
+  Chassis: RJ Tech Limited. Software / description: TerraAgent Robotics.
+
+  Same frame names and conventions as Luchs A (luchs_a_macro.xacro), so software written for one
+  runs on the other with a change of description:
+    base_footprint : on the ground plane, centred between the front and rear axles (half
+                     wheelbase) and between the left and right wheels.
+    base_link      : directly above base_footprint at wheel-axle height (z = 0.279 m).
+                     x forward, y left, z up. The Luchs Chassis Interface (LCI) reports motion at
+                     the rear-axle centre; the driver converts it to base_link.
+    <corner>_steer_link : steering axis at the wheel centre (front and rear EPS, dual Ackermann).
+    <corner>_wheel_link : wheel centre (in-wheel hub motor), spins about its y axis.
+    top_plate_link : top surface of the deck. Mount payloads relative to this frame.
+    imu_link       : chassis IMU (LCI 0x5BE / 0x5B1). PLACEHOLDER at base_link (to be confirmed).
+    laser_link     : EXAMPLE mount at the front of the deck (optional).
+
+  Geometry from the Luchs B data sheet v1.3: 1990 x 1150 x 800 mm overall, wheelbase 1430 mm,
+  track 970 mm, 22x7-10 tyres, 300 mm ground clearance, 230 kg. Body box and masses are
+  envelopes / estimates until the CAD is released (to be confirmed).
+
+  variant : standard (black) | cooling (white heat-protective finish)
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="PI" value="3.141592653589793"/>
+  <xacro:property name="b_wheel_radius" value="0.2794"/>     <!-- 22 in tyre -->
+  <xacro:property name="b_wheel_width" value="0.178"/>       <!-- 7 in -->
+  <xacro:property name="b_half_wb" value="0.715"/>           <!-- wheelbase 1.430 (chassis team: 1.445, to be confirmed) -->
+  <xacro:property name="b_half_track" value="0.485"/>        <!-- track 0.970 (top view: 0.990, to be confirmed) -->
+  <xacro:property name="b_steer_lim" value="0.5236"/>        <!-- 30 deg road-wheel angle, to be confirmed -->
+  <xacro:property name="b_mass" value="230.0"/>
+  <xacro:property name="b_wheel_mass" value="18.0"/>         <!-- tyre + rim + hub motor, estimate -->
+  <xacro:property name="b_steer_mass" value="4.0"/>          <!-- knuckle / upright, estimate -->
+  <xacro:property name="b_body_len" value="1.700"/>          <!-- body shell, estimate -->
+  <xacro:property name="b_body_wid" value="0.760"/>          <!-- between the tyres -->
+  <xacro:property name="b_clearance" value="0.300"/>
+  <xacro:property name="b_height" value="0.800"/>
+
+  <material name="luchs_b_body_standard"><color rgba="0.05 0.05 0.06 1.0"/></material>
+  <material name="luchs_b_body_cooling"><color rgba="0.92 0.92 0.90 1.0"/></material>
+  <material name="luchs_b_tyre"><color rgba="0.03 0.03 0.03 1.0"/></material>
+  <material name="luchs_b_hub"><color rgba="0.35 0.36 0.38 1.0"/></material>
+  <material name="luchs_b_red"><color rgba="0.753 0.043 0.067 1.0"/></material>
+
+  <xacro:macro name="b_box_inertial" params="m x y z *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12.0}" ixy="0" ixz="0" iyy="${m*(x*x+z*z)/12.0}" iyz="0"
+               izz="${m*(x*x+y*y)/12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- fb: +1 front / -1 rear ; lr: +1 left / -1 right -->
+  <xacro:macro name="luchs_b_corner" params="prefix name fb lr">
+    <link name="${prefix}${name}_steer_link">
+      <visual>
+        <origin xyz="0 ${-lr*0.11} 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="0.06" length="0.05"/></geometry>
+        <material name="luchs_b_red"/>
+      </visual>
+      <xacro:b_box_inertial m="${b_steer_mass}" x="0.12" y="0.10" z="0.20">
+        <origin xyz="0 ${-lr*0.11} 0" rpy="0 0 0"/>
+      </xacro:b_box_inertial>
+    </link>
+    <joint name="${prefix}${name}_steer_joint" type="revolute">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}${name}_steer_link"/>
+      <origin xyz="${fb*b_half_wb} ${lr*b_half_track} 0" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="${-b_steer_lim}" upper="${b_steer_lim}" effort="400.0" velocity="1.0"/>  <!-- to be confirmed -->
+    </joint>
+
+    <link name="${prefix}${name}_wheel_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${b_wheel_radius}" length="${b_wheel_width}"/></geometry>
+        <material name="luchs_b_tyre"/>
+      </visual>
+      <visual>
+        <origin xyz="0 ${lr*(b_wheel_width/2 + 0.002)} 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="0.13" length="0.006"/></geometry>
+        <material name="luchs_b_hub"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${b_wheel_radius}" length="${b_wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${b_wheel_mass}"/>
+        <inertia ixx="${b_wheel_mass*(3*b_wheel_radius*b_wheel_radius+b_wheel_width*b_wheel_width)/12.0}"
+                 ixy="0" ixz="0" iyy="${b_wheel_mass*b_wheel_radius*b_wheel_radius/2.0}" iyz="0"
+                 izz="${b_wheel_mass*(3*b_wheel_radius*b_wheel_radius+b_wheel_width*b_wheel_width)/12.0}"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}${name}_wheel_joint" type="continuous">
+      <parent link="${prefix}${name}_steer_link"/>
+      <child link="${prefix}${name}_wheel_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="330.0" velocity="40.0"/>   <!-- 330 N m peak per wheel; 40 km/h = 39.8 rad/s -->
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="luchs_b" params="prefix:='' variant:='standard' laser_example:=true">
+    <xacro:if value="${variant not in ['standard', 'cooling']}">
+      ${xacro.fatal('luchs_b: variant must be standard or cooling (got: ' + str(variant) + ')')}
+    </xacro:if>
+    <xacro:property name="zmin" value="${b_clearance - b_wheel_radius}"/>
+    <xacro:property name="deck_z" value="${b_height - b_wheel_radius}"/>
+    <xacro:property name="body_h" value="${deck_z - zmin}"/>
+    <xacro:property name="body_mass" value="${b_mass - 4*b_wheel_mass - 4*b_steer_mass}"/>
+
+    <link name="${prefix}base_footprint"/>
+    <joint name="${prefix}base_footprint_joint" type="fixed">
+      <parent link="${prefix}base_footprint"/>
+      <child link="${prefix}base_link"/>
+      <origin xyz="0 0 ${b_wheel_radius}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 ${(deck_z + zmin)/2}" rpy="0 0 0"/>
+        <geometry><box size="${b_body_len} ${b_body_wid} ${body_h}"/></geometry>
+        <material name="luchs_b_body_${variant}"/>
+      </visual>
+      <!-- front and rear bumpers -->
+      <visual>
+        <origin xyz="${b_body_len/2 + 0.04} 0 ${zmin + 0.12}" rpy="0 0 0"/>
+        <geometry><box size="0.08 ${b_body_wid - 0.06} 0.10"/></geometry>
+        <material name="luchs_b_hub"/>
+      </visual>
+      <visual>
+        <origin xyz="${-b_body_len/2 - 0.04} 0 ${zmin + 0.12}" rpy="0 0 0"/>
+        <geometry><box size="0.08 ${b_body_wid - 0.06} 0.10"/></geometry>
+        <material name="luchs_b_hub"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${(deck_z + zmin)/2}" rpy="0 0 0"/>
+        <geometry><box size="${b_body_len} ${b_body_wid} ${body_h}"/></geometry>
+      </collision>
+      <xacro:b_box_inertial m="${body_mass}" x="${b_body_len}" y="${b_body_wid}" z="${body_h}">
+        <origin xyz="0 0 ${(deck_z + zmin)/2 - 0.05}" rpy="0 0 0"/>   <!-- batteries low: estimate -->
+      </xacro:b_box_inertial>
+    </link>
+
+    <xacro:luchs_b_corner prefix="${prefix}" name="front_left"  fb="1"  lr="1"/>
+    <xacro:luchs_b_corner prefix="${prefix}" name="front_right" fb="1"  lr="-1"/>
+    <xacro:luchs_b_corner prefix="${prefix}" name="rear_left"   fb="-1" lr="1"/>
+    <xacro:luchs_b_corner prefix="${prefix}" name="rear_right"  fb="-1" lr="-1"/>
+
+    <link name="${prefix}imu_link"/>
+    <joint name="${prefix}imu_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}imu_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>   <!-- PLACEHOLDER: chassis IMU position to be confirmed -->
+    </joint>
+
+    <link name="${prefix}top_plate_link"/>
+    <joint name="${prefix}top_plate_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}top_plate_link"/>
+      <origin xyz="0 0 ${deck_z}" rpy="0 0 0"/>
+    </joint>
+
+    <xacro:if value="${laser_example}">
+      <link name="${prefix}laser_link"/>
+      <joint name="${prefix}laser_joint" type="fixed">
+        <parent link="${prefix}top_plate_link"/>
+        <child link="${prefix}laser_link"/>
+        <origin xyz="0.750 0 0" rpy="0 0 0"/>
+      </joint>
+    </xacro:if>
+  </xacro:macro>
+
+</robot>

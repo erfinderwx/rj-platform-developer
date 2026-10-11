@@ -1,0 +1,6 @@
+# Example: give a specific USB-CAN adapter a fixed name ("luchs_can") so the driver
+# configuration does not depend on enumeration order.
+# 1. Find the serial:   udevadm info -a -p /sys/class/net/can0 | grep -m1 ATTRS{serial}
+# 2. Put it below, copy this file to /etc/udev/rules.d/, then: sudo udevadm control --reload
+# 3. Use can_interface:=luchs_can
+SUBSYSTEM=="net", ACTION=="add", ATTRS{serial}=="REPLACE_WITH_ADAPTER_SERIAL", NAME="luchs_can"

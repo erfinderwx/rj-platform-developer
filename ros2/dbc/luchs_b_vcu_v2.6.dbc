@@ -1,0 +1,87 @@
+VERSION "Luchs B VCU upper interface V2.6"
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: 
+
+
+BO_ 1793 UpperCmd: 8 Host
+ SG_ Heartbeat : 56|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Gear : 52|4@1+ (1.0,0.0) [0|0] "" Vector__XXX
+ SG_ Park : 51|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ EStop : 50|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Headlight : 49|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RemoteEnable : 48|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ SteerRate : 32|10@1+ (1,0) [0|0] "deg/s" Vector__XXX
+ SG_ SpeedCap : 24|8@1+ (1,0) [0|0] "km/h" Vector__XXX
+ SG_ SteerAngle : 16|8@1- (1,0) [0|0] "deg" Vector__XXX
+ SG_ Brake : 8|8@1+ (1,0) [0|0] "%" Vector__XXX
+ SG_ Throttle : 0|8@1+ (1,0) [0|0] "%" Vector__XXX
+
+BO_ 1795 VCU2Upper: 8 VCU
+ SG_ Heartbeat : 56|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Speed : 48|8@1+ (1,0) [0|0] "km/h" Vector__XXX
+ SG_ Mode : 44|1@1+ (1.0,0.0) [0|0] "" Vector__XXX
+ SG_ Gear : 42|2@1+ (1.0,0.0) [0|0] "" Vector__XXX
+ SG_ Current : 32|10@1+ (1,0) [0|0] "A" Vector__XXX
+ SG_ FaultLevel : 24|2@1+ (1.0,0.0) [0|0] "" Vector__XXX
+ SG_ BatteryVoltage : 16|8@1+ (1,0) [0|0] "V" Vector__XXX
+ SG_ BatteryTemp : 8|8@1+ (1,-40) [0|0] "degC" Vector__XXX
+ SG_ SOC : 0|8@1+ (1,0) [0|0] "%" Vector__XXX
+
+
+
+
+CM_ BO_ 1793 "Host -> VCU, 10 ms. Identifier written \"701\" in the sheet; hexadecimal TO CONFIRM";
+CM_ SG_ 1793 Heartbeat "0-255, increment every frame";
+CM_ SG_ 1793 RemoteEnable "0 handset (RC), 1 upper computer";
+CM_ SG_ 1793 SteerRate "50-520";
+CM_ SG_ 1793 SpeedCap "Target speed limit 0-30";
+CM_ SG_ 1793 SteerAngle "Road-wheel angle -42..42. Sign TO CONFIRM (EPS sheet: clockwise = positive)";
+CM_ SG_ 1793 Brake "Brake pedal 0-100";
+CM_ SG_ 1793 Throttle "Accelerator pedal 0-100";
+CM_ BO_ 1795 "VCU -> host, 10 ms";
+CM_ SG_ 1795 Speed "Unsigned, 1 km/h; direction from Gear";
+CM_ SG_ 1795 Current "Range -200..200 A in the sheet; offset TO CONFIRM";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65535;
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_ "GenMsgCycleTime" BO_ 1793 10;
+BA_ "GenMsgCycleTime" BO_ 1795 10;
+VAL_ 1793 Gear 0 "N" 1 "D" 2 "R" ;
+VAL_ 1795 Mode 0 "remote_control" 1 "upper_computer" ;
+VAL_ 1795 Gear 0 "N" 1 "D" 2 "R" ;
+VAL_ 1795 FaultLevel 0 "none" 1 "motor_controller" 2 "BMS" 3 "several" ;
+
+
+

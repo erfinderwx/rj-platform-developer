@@ -1,0 +1,61 @@
+VERSION "1.1"
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: Host
+
+
+BO_ 1442 LampCmd_0x5A2: 8 Host
+ SG_ FaultLamp : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ReverseLamp : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ TurnSignal : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+BO_ 1443 LampCmd_0x5A3: 8 Host
+ SG_ FaultLamp : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ReverseLamp : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ TurnSignal : 7|8@0+ (1.0,0) [0|0] "" Vector__XXX
+
+
+
+
+CM_ BO_ 1442 "Reference-driver layout";
+CM_ BO_ 1443 "Protocol-document layout";
+
+
+
+VAL_ 1442 TurnSignal 0 "off" 1 "left" 2 "right" ;
+VAL_ 1443 TurnSignal 0 "off" 1 "left" 2 "right" ;
+
+
+

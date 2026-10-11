@@ -1,0 +1,235 @@
+VERSION "LCI 1.0 draft r3 - Luchs B"
+
+NS_ :
+
+BS_:
+
+BU_: HOST CHASSIS
+
+BO_ 1440 LCI_MotionCmd: 8 HOST
+ SG_ TargetVx : 7|16@0- (0.001,0) [-32.767|32.767] "m/s" CHASSIS
+ SG_ TargetVy : 23|16@0- (0.001,0) [-32.767|32.767] "m/s" CHASSIS
+ SG_ TargetWz : 39|16@0- (0.001,0) [-32.767|32.767] "rad/s" CHASSIS
+ SG_ KinematicModel : 55|8@0+ (1,0) [0|4] "" CHASSIS
+ SG_ ControlMode : 63|8@0+ (1,0) [0|0] "" CHASSIS
+
+BO_ 1441 LCI_SteerCmd: 8 HOST
+ SG_ Gear : 7|8@0+ (1,0) [0|4] "" CHASSIS
+ SG_ FrontSteerAngle : 15|16@0- (0.001,0) [-32.767|32.767] "rad" CHASSIS
+ SG_ RearSteerAngle : 31|16@0- (0.001,0) [-32.767|32.767] "rad" CHASSIS
+ SG_ SteerSource : 47|8@0+ (1,0) [0|1] "" CHASSIS
+ SG_ AccelLimit : 55|16@0+ (0.001,0) [0|65.535] "m/s^2" CHASSIS
+
+BO_ 1443 LCI_LampCmd: 8 HOST
+ SG_ TurnIndicator : 7|8@0+ (1,0) [0|3] "" CHASSIS
+ SG_ ReverseLamp : 15|8@0+ (1,0) [0|1] "" CHASSIS
+ SG_ FaultLamp : 23|8@0+ (1,0) [0|1] "" CHASSIS
+ SG_ Headlight : 31|8@0+ (1,0) [0|2] "" CHASSIS
+ SG_ Horn : 39|8@0+ (1,0) [0|1] "" CHASSIS
+ SG_ Beacon : 47|8@0+ (1,0) [0|1] "" CHASSIS
+
+BO_ 1444 LCI_HostTime: 8 HOST
+ SG_ HostTimeMs : 7|64@0+ (1,0) [0|1.84467e+19] "ms" CHASSIS
+
+BO_ 1445 LCI_HostHeartbeat: 8 HOST
+ SG_ AliveCounter : 7|8@0+ (1,0) [0|255] "" CHASSIS
+ SG_ EStopRequest : 8|1@0+ (1,0) [0|1] "" CHASSIS
+ SG_ ParkRequest : 9|1@0+ (1,0) [0|1] "" CHASSIS
+ SG_ PayloadPower1_On : 11|1@0+ (1,0) [0|1] "" CHASSIS
+ SG_ PayloadPower2_On : 12|1@0+ (1,0) [0|1] "" CHASSIS
+ SG_ SpeedLimit : 23|16@0+ (0.01,0) [0|655.35] "m/s" CHASSIS
+ SG_ Checksum : 63|8@0+ (1,0) [0|255] "" CHASSIS
+
+BO_ 1456 LCI_LimitsFb: 8 CHASSIS
+ SG_ MaxVxFwd : 7|16@0+ (0.01,0) [0|655.35] "m/s" HOST
+ SG_ MaxVxRev : 23|16@0+ (0.01,0) [0|655.35] "m/s" HOST
+ SG_ MaxSteerAngle : 39|16@0+ (0.001,0) [0|65.535] "rad" HOST
+ SG_ LimitReason : 55|8@0+ (1,0) [0|255] "" HOST
+ SG_ SpeedClipped : 56|1@0+ (1,0) [0|1] "" HOST
+ SG_ SteerClipped : 57|1@0+ (1,0) [0|1] "" HOST
+ SG_ AccelClipped : 58|1@0+ (1,0) [0|1] "" HOST
+
+BO_ 1457 LCI_ImuAccelFb: 8 CHASSIS
+ SG_ AccelX : 7|16@0- (0.002,0) [-65.534|65.534] "m/s^2" HOST
+ SG_ AccelY : 23|16@0- (0.002,0) [-65.534|65.534] "m/s^2" HOST
+ SG_ AccelZ : 39|16@0- (0.002,0) [-65.534|65.534] "m/s^2" HOST
+ SG_ ImuCounter : 55|8@0+ (1,0) [0|255] "" HOST
+
+BO_ 1458 LCI_AttitudeFb: 8 CHASSIS
+ SG_ Roll : 7|16@0- (0.0001,0) [-3.2767|3.2767] "rad" HOST
+ SG_ Pitch : 23|16@0- (0.0001,0) [-3.2767|3.2767] "rad" HOST
+
+BO_ 1461 LCI_MotionFb: 8 CHASSIS
+ SG_ ActualVx : 7|16@0- (0.001,0) [-32.767|32.767] "m/s" HOST
+ SG_ ActualVy : 23|16@0- (0.001,0) [-32.767|32.767] "m/s" HOST
+ SG_ ActualWz : 39|16@0- (0.001,0) [-32.767|32.767] "rad/s" HOST
+ SG_ KinematicModel : 55|8@0+ (1,0) [0|4] "" HOST
+ SG_ ControlMode : 63|8@0+ (1,0) [0|34] "" HOST
+
+BO_ 1462 LCI_SteerFb: 8 CHASSIS
+ SG_ Gear : 7|8@0+ (1,0) [0|4] "" HOST
+ SG_ FrontSteerAngle : 15|16@0- (0.001,0) [-32.767|32.767] "rad" HOST
+ SG_ RearSteerAngle : 31|16@0- (0.001,0) [-32.767|32.767] "rad" HOST
+
+BO_ 1464 LCI_ProtectionFb: 8 CHASSIS
+ SG_ UltrasonicStop : 7|8@0+ (1,0) [0|4] "" HOST
+ SG_ BumperHit : 15|8@0+ (1,0) [0|2] "" HOST
+ SG_ EStopButton : 23|8@0+ (1,0) [0|2] "" HOST
+ SG_ FaultCode : 31|8@0+ (1,0) [0|255] "" HOST
+ SG_ UltrasonicDist_Front : 39|8@0+ (1,0) [0|255] "cm" HOST
+ SG_ UltrasonicDist_Rear : 47|8@0+ (1,0) [0|255] "cm" HOST
+ SG_ UltrasonicDist_Left : 55|8@0+ (1,0) [0|255] "cm" HOST
+ SG_ UltrasonicDist_Right : 63|8@0+ (1,0) [0|255] "cm" HOST
+
+BO_ 1465 LCI_WheelSpeedFb: 8 CHASSIS
+ SG_ WheelSpeed_LF : 7|16@0- (0.01,0) [-327.67|327.67] "rad/s" HOST
+ SG_ WheelSpeed_RF : 23|16@0- (0.01,0) [-327.67|327.67] "rad/s" HOST
+ SG_ WheelSpeed_LR : 39|16@0- (0.01,0) [-327.67|327.67] "rad/s" HOST
+ SG_ WheelSpeed_RR : 55|16@0- (0.01,0) [-327.67|327.67] "rad/s" HOST
+
+BO_ 1466 LCI_MotorFault: 8 CHASSIS
+ SG_ MotorFaultHigh : 7|32@0+ (1,0) [0|4.29497e+09] "" HOST
+ SG_ MotorFaultLow : 39|32@0+ (1,0) [0|4.29497e+09] "" HOST
+
+BO_ 1467 LCI_BatteryFb: 8 CHASSIS
+ SG_ SOC : 7|16@0+ (0.01,0) [0|100] "%" HOST
+ SG_ BatteryTemp : 23|16@0- (0.1,0) [-40|125] "degC" HOST
+ SG_ ChargeProgress : 39|16@0+ (1,0) [0|100] "%" HOST
+ SG_ BatteryVoltage : 55|16@0+ (0.1,0) [0|6553.5] "V" HOST
+
+BO_ 1469 LCI_ChassisState: 8 CHASSIS
+ SG_ OperatingMode : 7|8@0+ (1,0) [0|2] "" HOST
+ SG_ EStopSource : 15|8@0+ (1,0) [0|255] "" HOST
+ SG_ FaultLevel : 23|8@0+ (1,0) [0|3] "" HOST
+ SG_ RCOnline : 24|1@0+ (1,0) [0|1] "" HOST
+ SG_ RCEnabled : 25|1@0+ (1,0) [0|1] "" HOST
+ SG_ DriveMode4WD : 26|1@0+ (1,0) [0|1] "" HOST
+ SG_ ParkBrakeEngaged : 27|1@0+ (1,0) [0|1] "" HOST
+ SG_ RCLink : 29|2@0+ (1,0) [0|3] "" HOST
+ SG_ CmdClipped : 30|1@0+ (1,0) [0|1] "" HOST
+ SG_ ActiveSpeedLimit : 39|16@0+ (0.01,0) [0|655.35] "m/s" HOST
+ SG_ AliveCounter : 55|8@0+ (1,0) [0|255] "" HOST
+ SG_ Checksum : 63|8@0+ (1,0) [0|255] "" HOST
+
+BO_ 1470 LCI_ImuRateFb: 8 CHASSIS
+ SG_ RollRate : 7|16@0- (0.001,0) [-32.767|32.767] "rad/s" HOST
+ SG_ PitchRate : 23|16@0- (0.001,0) [-32.767|32.767] "rad/s" HOST
+ SG_ YawRate : 39|16@0- (0.001,0) [-32.767|32.767] "rad/s" HOST
+ SG_ ImuCounter : 55|8@0+ (1,0) [0|255] "" HOST
+ SG_ ImuStatus : 63|8@0+ (1,0) [0|2] "" HOST
+
+BO_ 1472 LCI_B_BrakeSteerFb: 8 CHASSIS
+ SG_ BrakePressure : 7|16@0+ (0.01,0) [0|655.35] "MPa" HOST
+ SG_ EpbState : 23|8@0+ (1,0) [0|4] "" HOST
+ SG_ EpsFrontState : 31|8@0+ (1,0) [0|3] "" HOST
+ SG_ EpsRearState : 39|8@0+ (1,0) [0|3] "" HOST
+ SG_ BrakeState : 47|8@0+ (1,0) [0|3] "" HOST
+
+BO_ 1473 LCI_B_MotorTempFb: 8 CHASSIS
+ SG_ MotorTemp_LF : 7|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ MotorTemp_RF : 15|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ MotorTemp_LR : 23|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ MotorTemp_RR : 31|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ CtrlTemp_LF : 39|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ CtrlTemp_RF : 47|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ CtrlTemp_LR : 55|8@0+ (1,-40) [-40|215] "degC" HOST
+ SG_ CtrlTemp_RR : 63|8@0+ (1,-40) [-40|215] "degC" HOST
+
+BO_ 1471 LCI_Version: 8 CHASSIS
+ SG_ LciMajor : 7|8@0+ (1,0) [0|255] "" HOST
+ SG_ LciMinor : 15|8@0+ (1,0) [0|255] "" HOST
+ SG_ ModelId : 23|8@0+ (1,0) [0|255] "" HOST
+ SG_ FwMajor : 31|8@0+ (1,0) [0|255] "" HOST
+ SG_ FwMinor : 39|8@0+ (1,0) [0|255] "" HOST
+ SG_ FwPatch : 47|8@0+ (1,0) [0|255] "" HOST
+
+CM_ BO_ 1440 "Body-frame velocity command at the reference point (rear-axle centre, X forward, Y left). The chassis closes the speed and yaw loops and clamps to its live limits (0x5B0). Cycle 20 ms nominal (any period ≤ 50 ms accepted). Applies: All.";
+CM_ SG_ 1440 TargetVx "Longitudinal speed, +forward";
+CM_ SG_ 1440 TargetVy "Lateral speed, +left. 4WS only; others send 0";
+CM_ SG_ 1440 TargetWz "Yaw rate, +counter-clockwise";
+CM_ SG_ 1440 KinematicModel "1=Skid-steer 2=Ackermann (front) 3=4WS 4=Dual Ackermann";
+CM_ SG_ 1440 ControlMode "0x00 = autonomous (only value)";
+CM_ BO_ 1441 "Gear and axle steering angles for Ackermann-type chassis. Cycle 20 ms nominal (≤ 50 ms). Applies: Ackermann models (A-FA, A-DA, B).";
+CM_ SG_ 1441 Gear "0=disabled 1=P 2=R 3=N 4=D";
+CM_ SG_ 1441 FrontSteerAngle "Road-wheel angle, front axle, +left";
+CM_ SG_ 1441 RearSteerAngle "Road-wheel angle, rear axle, +left (dual Ackermann / AWS)";
+CM_ SG_ 1441 SteerSource "r3. 0 = steer from TargetWz in 0x5A0 (yaw-rate mode) | 1 = steer to the angles in this frame (angle mode, also at standstill)";
+CM_ SG_ 1441 AccelLimit "r3. Max |acceleration| to reach TargetVx; 0 = chassis default ramp";
+CM_ BO_ 1443 "Lamps and horn. Brake and reverse lamps stay automatic on chassis that drive them themselves. Cycle 100 ms. Applies: All (A: custom builds).";
+CM_ SG_ 1443 TurnIndicator "0=off 1=left 2=right 3=hazard (3 new in r3)";
+CM_ SG_ 1443 ReverseLamp "0=normal 1=reversing (ignored where automatic)";
+CM_ SG_ 1443 FaultLamp "0=normal 1=host system fault";
+CM_ SG_ 1443 Headlight "r3. 0=off 1=low 2=high (moved here from 0x5A5 bit 10)";
+CM_ SG_ 1443 Horn "r3. 1=sound";
+CM_ SG_ 1443 Beacon "r3. Warning beacon, where fitted";
+CM_ BO_ 1444 "Host wall-clock time so chassis logs and fault records can be matched to host logs. Cycle 1 s. Applies: All (optional).";
+CM_ SG_ 1444 HostTimeMs "Milliseconds since 1970-01-01 UTC";
+CM_ BO_ 1445 "Liveness and safety requests from the host. Missing or frozen for 200 ms -> controlled stop, park, report HeartbeatTimeout. EStopRequest is always executed as an emergency stop and never downgraded; ParkRequest is the controlled stop. Cycle 20 ms (timeout 200 ms). Applies: All.";
+CM_ SG_ 1445 AliveCounter "Increments by 1 every frame, wraps 255->0";
+CM_ SG_ 1445 EStopRequest "bit 8. 1 = emergency stop (latched until maintenance reset)";
+CM_ SG_ 1445 ParkRequest "bit 9. 1 = stop and hold";
+CM_ SG_ 1445 PayloadPower1_On "bit 11. Switched payload output 1";
+CM_ SG_ 1445 PayloadPower2_On "bit 12. Switched payload output 2";
+CM_ SG_ 1445 SpeedLimit "Host-side speed cap; 0 = use chassis default";
+CM_ SG_ 1445 Checksum "Low byte of (sum of bytes 0-6), XOR 0xFF";
+CM_ BO_ 1456 "Live limits the chassis will enforce right now (slope, roll, temperature, battery, faults, host cap). Commands beyond them are executed at the limit and flagged. Cycle 20 ms. Applies: All (B: required | A: static values allowed).";
+CM_ SG_ 1456 MaxVxFwd "Allowed forward speed";
+CM_ SG_ 1456 MaxVxRev "Allowed reverse speed";
+CM_ SG_ 1456 MaxSteerAngle "Allowed |road-wheel angle| at the current speed";
+CM_ SG_ 1456 LimitReason "bit field: 0 slope/roll | 1 temperature | 2 battery | 3 fault derate | 4 host SpeedLimit | 5 speed-dependent steer limit | 6 maintenance/RC | 7 other";
+CM_ SG_ 1456 SpeedClipped "bit 56. Last TargetVx exceeded the limit and was clamped";
+CM_ SG_ 1456 SteerClipped "bit 57. Last steering request was clamped";
+CM_ SG_ 1456 AccelClipped "bit 58. Last AccelLimit was clamped";
+CM_ BO_ 1457 "Chassis IMU accelerations in the vehicle frame (X forward, Y left, Z up), gravity included. Paired with 0x5BE by ImuCounter. Cycle 10 ms. Applies: Chassis with IMU (B: to be added).";
+CM_ SG_ 1457 AccelZ "~ +9.81 at rest on level ground";
+CM_ SG_ 1457 ImuCounter "Same value as the matching 0x5BE frame";
+CM_ BO_ 1458 "Roll and pitch estimated by the chassis; the same values it uses for slope and roll-over limits. Cycle 20 ms. Applies: Chassis with IMU.";
+CM_ SG_ 1458 Roll "+right side down";
+CM_ SG_ 1458 Pitch "+nose down";
+CM_ BO_ 1461 "Measured body-frame motion at the reference point (rear-axle centre). In dual Ackermann the rear-axle centre moves sideways: ActualVy = −ActualWz|L/2. Cycle 20 ms. Applies: All.";
+CM_ SG_ 1461 ActualVy "4WS and dual Ackermann; 0 otherwise";
+CM_ SG_ 1461 KinematicModel "As 0x5A0";
+CM_ SG_ 1461 ControlMode "0x11 = remote control, 0x22 = autonomous (hexadecimal)";
+CM_ BO_ 1462 "Measured gear and axle steering angles. Cycle 20 ms. Applies: Ackermann models.";
+CM_ SG_ 1462 Gear "As 0x5A1";
+CM_ BO_ 1464 "Proximity and contact protection. Cycle 50 ms. Applies: All.";
+CM_ SG_ 1464 UltrasonicStop "0=none 1=left 2=right 3=front 4=rear";
+CM_ SG_ 1464 BumperHit "0=none 1=front 2=rear";
+CM_ SG_ 1464 EStopButton "0=none 1=left 2=right";
+CM_ SG_ 1464 FaultCode "Chassis fault code (Appendix B)";
+CM_ SG_ 1464 UltrasonicDist_Front "1 cm per bit; 255 = no echo / not fitted";
+CM_ BO_ 1465 "Drive-wheel angular speeds. Order: LF, RF, LR, RR. 0.01 rad/s covers both chassis (B ~ 40 rad/s at 40 km/h). Cycle 20 ms. Applies: All.";
+CM_ BO_ 1466 "Drive and steering motor fault bit fields. Cycle 100 ms. Applies: All.";
+CM_ SG_ 1466 MotorFaultHigh "Bit table to be published";
+CM_ SG_ 1466 MotorFaultLow "Bit table to be published";
+CM_ BO_ 1467 "Battery state. Scalings fixed so no field overflows on a 48 V or 72 V pack. Cycle 100 ms. Applies: All.";
+CM_ SG_ 1467 SOC "0.01 % per bit";
+CM_ SG_ 1467 BatteryTemp "0.1 degC per bit";
+CM_ SG_ 1467 BatteryVoltage "0.1 V per bit (A: confirmed by measurement)";
+CM_ BO_ 1469 "Who is in control, why it stopped, and whether it is alive. Cycle 20 ms. Applies: All.";
+CM_ SG_ 1469 OperatingMode "0=maintenance 1=remote control 2=automatic";
+CM_ SG_ 1469 EStopSource "bit field: 0 onboard L | 1 onboard R | 2 RC | 3 host | 4 bumper F | 5 bumper R | 6 external loop | 7 heartbeat timeout";
+CM_ SG_ 1469 FaultLevel "0=none 1=warning 2=derated 3=stop";
+CM_ SG_ 1469 RCOnline "bit 24";
+CM_ SG_ 1469 RCEnabled "bit 25";
+CM_ SG_ 1469 DriveMode4WD "bit 26. 1=4WD 0=2WD (B)";
+CM_ SG_ 1469 ParkBrakeEngaged "bit 27. EPB (B) or motor hold (A) engaged";
+CM_ SG_ 1469 RCLink "bits 28-29. r3. 0=good 1=weak 2=lost 3=not fitted";
+CM_ SG_ 1469 CmdClipped "bit 30. r3. Any command clamped (details in 0x5B0)";
+CM_ SG_ 1469 ActiveSpeedLimit "Effective cap after all limits (= 0x5B0 MaxVxFwd)";
+CM_ SG_ 1469 Checksum "Low byte of (sum of bytes 0-6), XOR 0xFF";
+CM_ BO_ 1470 "Chassis IMU angular rates in the vehicle frame. 100 Hz, as asked for in the chassis-side July reply. Cycle 10 ms. Applies: Chassis with IMU (B: to be added).";
+CM_ SG_ 1470 RollRate "+right side down";
+CM_ SG_ 1470 PitchRate "+nose down";
+CM_ SG_ 1470 YawRate "+counter-clockwise";
+CM_ SG_ 1470 ImuCounter "Increments every sample";
+CM_ SG_ 1470 ImuStatus "0=ok 1=initialising 2=fault";
+CM_ BO_ 1472 "Brake, parking-brake and steering-actuator status for diagnostics. Cycle 50 ms. Applies: Luchs B (extension range 0x5C0-0x5CF).";
+CM_ SG_ 1472 BrakePressure "Master-cylinder pressure from the brake booster";
+CM_ SG_ 1472 EpbState "0=released 1=applying 2=applied 3=releasing 4=fault";
+CM_ SG_ 1472 EpsFrontState "0=ok 1=warning 2=degraded 3=failed";
+CM_ SG_ 1472 EpsRearState "0=ok 1=warning 2=degraded 3=failed";
+CM_ SG_ 1472 BrakeState "0=ok 1=warning 2=degraded 3=failed";
+CM_ BO_ 1473 "Hub-motor and motor-controller temperatures (offset −40 degC). Cycle 500 ms. Applies: Luchs B.";
+CM_ BO_ 1471 "Lets one driver identify the chassis and protocol version at start-up. Cycle 1 s. Applies: All.";
+CM_ SG_ 1471 ModelId "0x0A A-DF | 0x0B A-FA | 0x0C A-DA | 0x0D A-4WS | 0x1B B (4 hub motors, dual EPS, single/dual Ackermann) | 0x2C C";

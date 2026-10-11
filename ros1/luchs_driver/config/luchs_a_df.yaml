@@ -1,0 +1,44 @@
+# Luchs A-DF: skid-steer (differential)
+# Usage: roslaunch luchs_bringup luchs_a.launch build:=df
+# ROS 1: same parameters as the ROS 2 driver; "a.b" becomes the nested "a: b:".
+build: df
+motion_model: ""                # empty = default for the build
+can_interface: can0
+dry_run: false
+publish_rate: 50.0
+cmd_vel_stamped: false
+battery_low_percent: 15.0
+geometry:
+  wheelbase: 0.594
+  track: 0.596
+  wheel_radius: 0.103
+  max_steer_angle: 0.0      # rad, TO CONFIRM with the chassis team
+control:
+  rate: 20.0              # Hz, 1..50
+  cmd_timeout: 0.5        # s
+  feedback_timeout: 0.5   # s
+  park_when_idle: true
+  send_host_time: true
+limits:
+  # limits (vehicle maximum 3.2 m/s; keep lower until the site is mapped)
+  max_vx: 2.0
+  max_wz: 1.5
+  max_accel_x: 1.5
+  max_accel_wz: 3.0
+  allow_pivot_turn: true
+odom:
+  frame_id: odom
+  child_frame_id: base_footprint
+  publish_tf: true           # false when robot_localization publishes odom -> base
+protocol:
+  # protocol details still to be confirmed on the firmware (see docs/protocol_luchs_a.md)
+  wheel_steer_cmd_id: 1443         # 0x5A3; lamps on 0x5A2
+  wheel_steer_cmd_order: lf_rf_lr_rr
+  wheel_steer_fb_order: lf_lr_rf_rr
+  wheel_speed_fb_order: lf_lr_rf_rr
+  wheel_speed_scale: 0.001
+  ultrasonic_scale: 0.01
+  battery_soc_scale: 0.1
+  battery_temperature_scale: 0.1
+  battery_voltage_scale: 0.1
+  charging_scale: 1.0
