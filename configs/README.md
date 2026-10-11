@@ -1,3 +1,5 @@
-# 配置资料｜待补充
+# Configuration examples
 
-这里将保存经核实并获准公开的配置模板及适用范围。当前没有可用于设备的配置文件，也没有已确认的产品型号或连接参数。
+Luchs A build configurations and the provisional B simulation configuration are in [ROS 2 driver config](../ros2/luchs_driver/config/) and [ROS 1 driver config](../ros1/luchs_driver/config/). Follow the matching driver README. B values are sample assumptions until accepted for the delivered vehicle.
+
+See the [version development manual](../docs/luchs-development-manual.md) for tests and formal-release requirements.

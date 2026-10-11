@@ -42,12 +42,16 @@ Status is tied to the tested commit and environment. A supplied test is not a co
 | Public import and original ZIP hashes | Checked locally | Manifest includes only the two already public ROS packages; private archive excluded |
 | Python syntax, package XML and preview defaults | Passed locally | Python, XML, YAML, package metadata and preview defaults checked on 2026-10-11 |
 | LCI DBC byte vectors | Passed locally | All 10 vectors pass in each tree with cantools 44.2.1 on 2026-10-11; draft software consistency only |
-| Standalone C++ SDK tests for both trees | Pending CI | CMake with GTest, then ctest --output-on-failure --no-tests=error |
-| ROS 2 Humble build and unit tests | Pending CI | Clean Linux container, rosdep, colcon build/test and result summary |
-| ROS 2 Jazzy build and unit tests | Pending CI | Repeat in the matching Jazzy environment |
-| ROS 1 Noetic build and A/B dry-run rostests | Pending CI | Noetic isolated build; record odometry, state and service results |
+| Standalone C++ SDK tests for both trees | Passed CI | Both source trees built with GTest; each CTest aggregate target passed, with zero-test rejection enabled |
+| ROS 2 Humble build and unit tests | Passed CI | Seven packages built; 63 SDK and 7 driver test cases passed in the matching Humble container |
+| ROS 2 Jazzy build and unit tests | Passed CI | Seven packages built; 63 SDK and 7 driver test cases passed in the matching Jazzy container |
+| ROS 1 Noetic build and A/B dry-run rostests | Passed CI | Isolated build and supplied A/B simulator rostests passed: A 2 checks, B 3 checks; result discovery guard also passed |
 | ROS 2 launch, topics, services and RViz smoke tests | Pending integration testing | Start A/B separately with dry_run:=true; inspect runtime outputs and transforms |
 | Physical SocketCAN and vehicle acceptance | Pending hardware testing | No physical A/B verification is claimed |
+
+Verified software commit: [`c1efaaf6262703de876a09a3880aaab7bab8699d`](https://github.com/erfinderwx/rj-platform-developer/commit/c1efaaf6262703de876a09a3880aaab7bab8699d). All five jobs in [CI run 38133325017](https://github.com/erfinderwx/rj-platform-developer/actions/runs/38133325017) passed on 2026-10-11. The published snapshot adds documentation to that tested software; its ROS sources and CI scripts are unchanged. Hosted SDK checks used Ubuntu 24.04 and CMake 3.31.6; ROS checks used the matching official Linux containers.
+
+The initial run's final Noetic result-discovery guard used an incorrect output filename. The simulator tests had passed; the guard was corrected and verified in the run above. This correction changes test-result collection, not vehicle control.
 
 The workflow is [Luchs preview checks](../.github/workflows/luchs-preview.yml). Results appear in [GitHub Actions](https://github.com/erfinderwx/rj-platform-developer/actions). Passing CI changes only the software checks it actually covers, not vehicle acceptance.
 
@@ -74,7 +78,7 @@ These unresolved details are visible in the public source and must be closed for
 | Topic | Required confirmation and test |
 | --- | --- |
 | Firmware and interface | Record chassis/controller/firmware revisions; establish whether that unit implements draft LCI, VCU V2.6 or a revised interface; obtain a matching public specification |
-| Geometry and steering | Validate wheelbase, track, effective wheel radius and mechanical steering range. B YAML example values 1.430 m, 0.970 m, 0.2794 m and 30 degrees are provisional |
+| Geometry and steering | Resolve source wheelbase 1.430 vs 1.445 m and track 0.970 vs 0.990 m; measure effective loaded wheel radius instead of assuming the 0.2794 m example, and confirm the 30 degree steering example against the actual mechanical and firmware limits |
 | Legacy B frames | Verify 0x701 and 0x703 identifiers, standard/extended format, payload, byte order, scale, timing and example steer_sign=-1; verify the legacy 42 degree assumption |
 | Speed loop | Validate command/feedback units, gearing, wheel direction, speed estimate and gains under the agreed load; set accepted speed/acceleration limits |
 | LCI implementation | Confirm command/feedback IDs and DLC, checksum/alive counter, heartbeat timing, version/model fields and unsupported-frame behavior against vehicle captures |
