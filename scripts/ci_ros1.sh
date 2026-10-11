@@ -66,7 +66,7 @@ import xml.etree.ElementTree as ET
 
 results = Path(sys.argv[1])
 for model in ('a', 'b'):
-    candidates = list(results.rglob(f'*drive_check_{model}*.xml'))
+    candidates = list(results.rglob(f'rosunit-drive_{model}.xml'))
     cases = sum(
         1 for result in candidates for case in ET.parse(result).getroot().iter('testcase')
         if case.find('skipped') is None and case.get('status') != 'notrun'
