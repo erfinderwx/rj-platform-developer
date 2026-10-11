@@ -1,3 +1,5 @@
-# 示例｜待补充
+# Developer examples
 
-真实代码和公开授权到位后，这里会加入经过验证的最小示例。当前没有可运行的示例、SDK 或驱动；请勿把此目录作为实车操作依据。
+Start with the simulator commands in the [ROS 2 README](../ros2/README.md) or [ROS 1 README](../ros1/README.md). SDK examples are under each tree's luchs_sdk/examples directory. Build only one ROS tree per workspace and keep dry_run enabled for simulator development.
+
+Example code and model values do not establish vehicle compatibility. See the [version development manual](../docs/luchs-development-manual.md).

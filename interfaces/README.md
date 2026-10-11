@@ -1,3 +1,5 @@
-# 接口资料｜待补充
+# Platform interfaces
 
-这里将发布允许公开且经核实的接口说明、版本关系与示例数据。当前没有协议参数、接口定义或可用 API。请勿根据目录名称推断具体设备能力。
+The Luchs preview provides [ROS topics and services](../ros2/luchs_driver/README.md), [Luchs A protocol references](../ros2/docs/protocol_luchs_a.md) and [Luchs B draft and legacy references](../ros2/docs/protocol_luchs_b.md). Select the interface matching the actual hardware and firmware.
+
+See the [version development manual](../docs/luchs-development-manual.md) for validation scope. Other platform interfaces are reserved for future approved public material.
